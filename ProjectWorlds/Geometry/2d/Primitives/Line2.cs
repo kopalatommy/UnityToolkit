@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ProjectWorlds.Geometry._2d
 {
     [System.Serializable]
-    public class Line2d
+    public class Line2
     {
         [SerializeField]
         private Vector2 start;
@@ -66,8 +66,8 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         [SerializeField]
-        private Bounds2d bounds;
-        public Bounds2d Bounds
+        private Bounds2 bounds;
+        public Bounds2 Bounds
         {
             get
             {
@@ -83,13 +83,13 @@ namespace ProjectWorlds.Geometry._2d
             }
         }
 
-        public Line2d(Vector2 start, Vector2 end)
+        public Line2(Vector2 start, Vector2 end)
         {
             this.start = start;
             this.end = end;
             difference = end - start;
             length = difference.magnitude;
-            this.bounds = new Bounds2d((start + end) * 0.5f, difference);
+            this.bounds = new Bounds2((start + end) * 0.5f, difference);
         }
 
         /// <summary>
@@ -97,9 +97,9 @@ namespace ProjectWorlds.Geometry._2d
         /// </summary>
         /// <param name="rad"></param>
         /// <returns></returns>
-        public Line2d Rotate(float rad)
+        public Line2 Rotate(float rad)
         {
-            return new Line2d(start.Rotate(rad), end.Rotate(rad));
+            return new Line2(start.Rotate(rad), end.Rotate(rad));
         }
 
         /// <summary>
@@ -108,49 +108,49 @@ namespace ProjectWorlds.Geometry._2d
         /// <param name="rad"></param>
         /// <param name="pivot"></param>
         /// <returns></returns>
-        public Line2d Rotate(float rad, Vector2 pivot)
+        public Line2 Rotate(float rad, Vector2 pivot)
         {
-            return new Line2d((start - pivot).Rotate90() + pivot, (end - pivot).Rotate90() + pivot);
+            return new Line2((start - pivot).Rotate90() + pivot, (end - pivot).Rotate90() + pivot);
         }
 
-        public Line2d Rotate90()
+        public Line2 Rotate90()
         {
-            return new Line2d(start.Rotate90(), end.Rotate90());
+            return new Line2(start.Rotate90(), end.Rotate90());
         }
 
-        public Line2d Rotate90(Vector2 pivot)
+        public Line2 Rotate90(Vector2 pivot)
         {
-            return new Line2d((start - pivot).Rotate90() + pivot, (end - pivot).Rotate90() + pivot);
+            return new Line2((start - pivot).Rotate90() + pivot, (end - pivot).Rotate90() + pivot);
         }
 
-        public Line2d RotateNeg90()
+        public Line2 RotateNeg90()
         {
-            return new Line2d(start.RotateNeg90(), end.RotateNeg90());
+            return new Line2(start.RotateNeg90(), end.RotateNeg90());
         }
 
-        public Line2d RotateNeg90(Vector2 pivot)
+        public Line2 RotateNeg90(Vector2 pivot)
         {
-            return new Line2d((start - pivot).RotateNeg90() + pivot, (end - pivot).RotateNeg90() + pivot);
+            return new Line2((start - pivot).RotateNeg90() + pivot, (end - pivot).RotateNeg90() + pivot);
         }
 
-        public Line2d Flip()
+        public Line2 Flip()
         {
-            return new Line2d(-start, -end);
+            return new Line2(-start, -end);
         }
 
-        public Line2d Flip(Vector2 pivot)
+        public Line2 Flip(Vector2 pivot)
         {
-            return new Line2d((-(start - pivot) + pivot), (-(end - pivot) + pivot));
+            return new Line2((-(start - pivot) + pivot), (-(end - pivot) + pivot));
         }
 
-        public Line2d Translate(Vector2 offset)
+        public Line2 Translate(Vector2 offset)
         {
-            return new Line2d(start + offset, end + offset);
+            return new Line2(start + offset, end + offset);
         }
 
-        public Line2d Crop(float startDist, float endDist)
+        public Line2 Crop(float startDist, float endDist)
         {
-            return new Line2d(LerpDistance(startDist), LerpDistance(length - endDist));
+            return new Line2(LerpDistance(startDist), LerpDistance(length - endDist));
         }
 
         public Vector2 Lerp(float t)
@@ -205,7 +205,7 @@ namespace ProjectWorlds.Geometry._2d
             return Vector2.Distance(GetClosestPointSegment(p), p);
         }
 
-        public bool Intersect(Line2d other, out Line2DIntersection intersection)
+        public bool Intersect(Line2 other, out Line2DIntersection intersection)
         {
             float denominator = (difference.y * other.difference.x - difference.x * other.difference.y);
 
@@ -248,11 +248,11 @@ namespace ProjectWorlds.Geometry._2d
 
         public bool Intersect(Vector2 point, out Line2DIntersection intersection)
         {
-            Line2d other = new Line2d(point, point + Normal);
+            Line2 other = new Line2(point, point + Normal);
             return Intersect(other, out intersection);
         }
 
-        public bool SegmentsIntersect(Line2d other)
+        public bool SegmentsIntersect(Line2 other)
         {
             Line2DIntersection intersection;
             if (Intersect(other, out intersection))
@@ -277,19 +277,19 @@ namespace ProjectWorlds.Geometry._2d
 
         public override bool Equals(System.Object obj)
         {
-            return obj is Line2d && this == (Line2d)obj;
+            return obj is Line2 && this == (Line2)obj;
         }
         public override int GetHashCode()
         {
             return start.GetHashCode() ^ end.GetHashCode();
         }
 
-        public static bool operator ==(Line2d a, Line2d b)
+        public static bool operator ==(Line2 a, Line2 b)
         {
             return (a.start == b.start) && (a.end == b.end);
         }
 
-        public static bool operator !=(Line2d a, Line2d b)
+        public static bool operator !=(Line2 a, Line2 b)
         {
             return !(a == b);
         }

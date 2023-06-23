@@ -276,6 +276,26 @@ namespace ProjectWorlds.DataStructures.Lists
             }
         }
 
+        public T Front()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return head.item;
+        }
+
+        public T Back()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return tail.item;
+        }
+
         /// <summary>
         /// Sets the item of the node at the specified index
         /// </summary>
@@ -382,6 +402,58 @@ namespace ProjectWorlds.DataStructures.Lists
                 new Node(item, cur, cur.Next);
                 //cur.Next = cur.Next.Prev = n;
                 count++;
+            }
+        }
+
+        public virtual void Insert(int index, IEnumerable<T> other)
+        {
+            if (index < 0 || index > count)
+            {
+                throw new IndexOutOfRangeException("index");
+            }
+
+            if (index == count)
+            {
+                Add(other);
+                return;
+            }
+
+            if (index == 0)
+            {
+                foreach (T item in other)
+                {
+                    head = new Node(item, null, head);
+                    count++;
+                }
+                while (head.Prev != null)
+                {
+                    head = head.Prev;
+                }
+            }
+            else if (index == count)
+            {
+                foreach (T item in other)
+                {
+                    tail = new Node(item, tail, null);
+                    count++;
+                }
+            }
+            else
+            {
+                Node cur;
+                if (index < count / 2)
+                {
+                    cur = GoToForward(head, index - 1);
+                }
+                else
+                {
+                    cur = GoToReverse(tail, count - index);
+                }
+                foreach (T item in other)
+                {
+                    cur = new Node(item, cur, cur.Next);
+                    count++;
+                }
             }
         }
 

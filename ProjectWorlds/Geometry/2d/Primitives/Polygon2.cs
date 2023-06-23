@@ -6,7 +6,7 @@ namespace ProjectWorlds.Geometry._2d
 {
     // Immutable representation of a polygon defined by an arbitrary number of points in 2D space
     [System.Serializable]
-    public struct Polygon2d
+    public struct Polygon2
     {
         /// <summary> Verts in local space. </summary>
         public Vector2[] Verts
@@ -49,34 +49,34 @@ namespace ProjectWorlds.Geometry._2d
         [SerializeField] private int triCount;
 
         /// <summary> Area in square units for each triangle </summary>
-        public Triangle2d[] Tris
+        public Triangle2[] Tris
         {
             get
             {
                 return tris;
             }
         }
-        [SerializeField] private Triangle2d[] tris;
+        [SerializeField] private Triangle2[] tris;
 
         /// <summary> Get the bounds of the polygon </summary>
-        public Bounds2d Bounds
+        public Bounds2 Bounds
         {
             get
             {
                 return bounds;
             }
         }
-        [SerializeField] private Bounds2d bounds;
+        [SerializeField] private Bounds2 bounds;
 
         /// <summary> Get the bounds of the polygon </summary>
-        public Line2d[] Edges
+        public Line2[] Edges
         {
             get
             {
                 return edges;
             }
         }
-        [SerializeField] private Line2d[] edges;
+        [SerializeField] private Line2[] edges;
 
         /// <summary> Returns true if polygon verts are in clockwise order </summary>
         public bool IsClockwise
@@ -89,25 +89,25 @@ namespace ProjectWorlds.Geometry._2d
         [SerializeField] private bool isClockwise;
 
         /// <summary> Returns a centered 2x2 quad </summary>
-        public static Polygon2d Quad
+        public static Polygon2 Quad
         {
             get
             {
-                return new Polygon2d(new Vector2(-1, 1), new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, -1));
+                return new Polygon2(new Vector2(-1, 1), new Vector2(1, 1), new Vector2(1, -1), new Vector2(-1, -1));
             }
         }
 
         /// <summary> Returns a centered quad with set height/width </summary>
-        public Polygon2d Rect(float width, float height)
+        public Polygon2 Rect(float width, float height)
         {
             float halfWidth = width * 0.5f;
             float halfHeight = height * 0.5f;
-            return new Polygon2d(new Vector2(-halfWidth, halfHeight), new Vector2(halfWidth, halfHeight), new Vector2(halfWidth, -halfHeight), new Vector2(-halfWidth, -halfHeight));
+            return new Polygon2(new Vector2(-halfWidth, halfHeight), new Vector2(halfWidth, halfHeight), new Vector2(halfWidth, -halfHeight), new Vector2(-halfWidth, -halfHeight));
         }
 
         /// <summary> Constructs and returns a centered, circular Polygon2D with a set number of segments. </summary>
         /// <param name="segments">4 or more segments recommended. </param>
-        public Polygon2d Circle(int segments)
+        public Polygon2 Circle(int segments)
         {
             Vector2[] verts = new Vector2[segments];
             for (int i = 0; i < segments; i++)
@@ -115,11 +115,11 @@ namespace ProjectWorlds.Geometry._2d
                 float rad = ((float)i / segments) * Mathf.PI * 2;
                 verts[i] = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
             }
-            return new Polygon2d(verts);
+            return new Polygon2(verts);
         }
 
         /// <summary> Constructor </summary>
-        public Polygon2d(params Vector2[] verts)
+        public Polygon2(params Vector2[] verts)
         {
             if (verts.Length < 4)
             {
@@ -128,10 +128,10 @@ namespace ProjectWorlds.Geometry._2d
             }
             this.verts = verts;
             triIndices = Triangulate(verts);
-            float area = Geometry2d.ShoelaceFormula(this.verts);
+            float area = Geometry2.ShoelaceFormula(this.verts);
             this.area = Mathf.Abs(area);
             triCount = triIndices.Length / 3;
-            bounds = new Bounds2d(verts);
+            bounds = new Bounds2(verts);
             edges = GetEdges(this.verts);
             tris = GetTriangles(this.verts, triIndices);
             isClockwise = area < 0;
@@ -175,14 +175,14 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Returns true if poly is completely inside this poly </summary>
-        public bool Contains(Polygon2d poly)
+        public bool Contains(Polygon2 poly)
         {
             //Check if poly contains all lines
             return (Contains(poly.Edges));
         }
 
         /// <summary> Returns true if poly is completely inside this poly </summary>
-        public bool Contains(params Line2d[] lines)
+        public bool Contains(params Line2[] lines)
         {
             if (lines.Length == 0)
             {
@@ -197,7 +197,7 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Returns true if polys intersect eachother</summary>
-        public bool Intersect(Polygon2d poly)
+        public bool Intersect(Polygon2 poly)
         {
             //Possible optimization: bounds check?
             //Start by performing a quick bounds test
@@ -215,7 +215,7 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Return true if any line intersects the edge of this polygon </summary>
-        public bool IntersectEdge(params Line2d[] lines)
+        public bool IntersectEdge(params Line2[] lines)
         {
             for (int i = 0; i < Edges.Length; i++)
             {
@@ -227,15 +227,15 @@ namespace ProjectWorlds.Geometry._2d
             return false;
         }
 
-        public Line2d GetNearestEdge(Vector2 point, out Vector2 intersection)
+        public Line2 GetNearestEdge(Vector2 point, out Vector2 intersection)
         {
-            Line2d output = new Line2d(Vector2.zero, Vector2.zero);
+            Line2 output = new Line2(Vector2.zero, Vector2.zero);
             intersection = Vector3.zero;
             float dist = Mathf.Infinity;
             for (int i = 0; i < Verts.Length; i++)
             {
 
-                Line2d line = new Line2d(
+                Line2 line = new Line2(
                     Verts[i],
                     (i == Verts.Length - 1) ? Verts[0] : Verts[i + 1]);
                 Vector2 newIntersection = line.GetClosestPointSegment(point);
@@ -251,14 +251,14 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Returns a Polygon2D with its verts reversed </summary>
-        public Polygon2d Flip()
+        public Polygon2 Flip()
         {
             Vector2[] verts = new Vector2[this.Verts.Length];
             for (int i = 0; i < verts.Length; i++)
             {
                 verts[i] = this.Verts[(verts.Length - 1) - i];
             }
-            return new Polygon2d(verts);
+            return new Polygon2(verts);
         }
 
         public override string ToString()
@@ -268,7 +268,7 @@ namespace ProjectWorlds.Geometry._2d
 
         public override bool Equals(System.Object obj)
         {
-            return obj is Polygon2d && this == (Polygon2d)obj;
+            return obj is Polygon2 && this == (Polygon2)obj;
         }
         public override int GetHashCode()
         {
@@ -280,7 +280,7 @@ namespace ProjectWorlds.Geometry._2d
             return hash;
         }
 
-        public static bool operator ==(Polygon2d a, Polygon2d b)
+        public static bool operator ==(Polygon2 a, Polygon2 b)
         {
             if (a.verts.Length != b.verts.Length) return false;
             for (int i = 0; i < a.verts.Length; i++)
@@ -290,7 +290,7 @@ namespace ProjectWorlds.Geometry._2d
             return true;
         }
 
-        public static bool operator !=(Polygon2d a, Polygon2d b)
+        public static bool operator !=(Polygon2 a, Polygon2 b)
         {
             return !(a == b);
         }
@@ -309,20 +309,20 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Returns all edges </summary>
-        private static Line2d[] GetEdges(Vector2[] verts)
+        private static Line2[] GetEdges(Vector2[] verts)
         {
-            Line2d[] edges = new Line2d[verts.Length];
-            for (int i = 0; i < edges.Length; i++) edges[i] = new Line2d(
+            Line2[] edges = new Line2[verts.Length];
+            for (int i = 0; i < edges.Length; i++) edges[i] = new Line2(
                 verts[i],
                 i < verts.Length - 1 ? verts[i + 1] : verts[0]
                 );
             return edges;
         }
 
-        private static Triangle2d[] GetTriangles(Vector2[] verts, int[] triIndices)
+        private static Triangle2[] GetTriangles(Vector2[] verts, int[] triIndices)
         {
-            Triangle2d[] tris = new Triangle2d[triIndices.Length / 3];
-            for (int i = 0; i < tris.Length; i++) tris[i] = new Triangle2d(
+            Triangle2[] tris = new Triangle2[triIndices.Length / 3];
+            for (int i = 0; i < tris.Length; i++) tris[i] = new Triangle2(
                 verts[triIndices[i * 3]],
                 verts[triIndices[i * 3 + 1]],
                 verts[triIndices[i * 3 + 2]]
@@ -420,7 +420,7 @@ namespace ProjectWorlds.Geometry._2d
         private static bool Snip(Vector2[] verts, int u, int v, int w, int n, int[] V)
         {
             int p;
-            Triangle2d tri = new Triangle2d(verts[V[u]], verts[V[v]], verts[V[w]]);
+            Triangle2 tri = new Triangle2(verts[V[u]], verts[V[v]], verts[V[w]]);
             if (Mathf.Epsilon > (((tri.b.x - tri.a.x) * (tri.c.y - tri.a.y)) - ((tri.b.y - tri.a.y) * (tri.c.x - tri.a.x))))
             {
                 return false;

@@ -188,9 +188,36 @@ namespace ProjectWorlds.DataStructures.Lists
         public T Get(int index)
         {
             if (index >= Count || index < 0)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             return GoTo(head, index).item;
+        }
+
+        public T Front()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return head.item;
+        }
+
+        public T Back()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            Node temp = head;
+            while (temp.next != null)
+            {
+                temp = temp.next;
+            }
+            return temp.item;
         }
 
         /// <summary>

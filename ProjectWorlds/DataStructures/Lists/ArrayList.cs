@@ -24,7 +24,9 @@ namespace ProjectWorlds.DataStructures.Lists
                     return true;
                 }
                 else
+                {
                     return false;
+                }
             }
 
             public void Reset()
@@ -140,14 +142,22 @@ namespace ProjectWorlds.DataStructures.Lists
         public void CopyTo(T[] array, int index)
         {
             if (array == null)
+            {
                 throw new ArgumentNullException("array");
+            }
             else if (index < 0)
+            {
                 throw new ArgumentOutOfRangeException("index");
+            }
             else if (array.Length < count)
+            {
                 throw new ArgumentException("length");
+            }
 
             foreach (T item in this)
+            {
                 array.SetValue(item, index++);
+            }
         }
 
         public static ArrayList<T> operator +(ArrayList<T> self, ArrayList<T> other)
@@ -174,19 +184,47 @@ namespace ProjectWorlds.DataStructures.Lists
         private void IncreaseBuffer()
         {
             if (buffer.Length == 0)
+            {
                 Reserve(1);
+            }
             if (count < 512)
+            {
                 Reserve(count * 2);
+            }
             else
+            {
                 Reserve(count + 512);
+            }
         }
 
         public T Get(int index)
         {
             if (index >= count || index < 0)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             return buffer[index];
+        }
+
+        public T Front()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return buffer[0];
+        }
+
+        public T Back()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return buffer[count - 1];
         }
 
         /*public void Set(int index, object value)
@@ -197,7 +235,9 @@ namespace ProjectWorlds.DataStructures.Lists
         public void Set(int index, T value)
         {
             if (index >= count || index < 0)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             buffer[index] = value;
         }
@@ -233,7 +273,9 @@ namespace ProjectWorlds.DataStructures.Lists
         public void Add(System.Collections.Generic.IEnumerable<T> other)
         {
             foreach (T item in other)
+            {
                 Add(item);
+            }
         }
 
         /*public void Insert(int index, object item)
@@ -243,51 +285,116 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public void Insert(int index, T item)
         {
-            if (index < 0 || index >= count)
+            if (index < 0 || index > count)
+            {
                 throw new IndexOutOfRangeException("index");
+            }
+            else if (index == count)
+            {
+                Add(item);
+            }
+            else
+            {
+                if (count == buffer.Length)
+                {
+                    IncreaseBuffer();
+                }
 
-            if (count == buffer.Length)
-                IncreaseBuffer();
+                for (int i = count; i > index; i--)
+                {
+                    buffer[i] = buffer[i - 1];
+                }
+                buffer[index] = item;
+                count++;
+            }
+        }
 
-            for (int i = count; i > index; i--)
-                buffer[i] = buffer[i - 1];
-            buffer[index] = item;
-            count++;
+        public void Insert(int index, System.Collections.Generic.IEnumerable<T> other)
+        {
+            if (index < 0 || index > count)
+            {
+                throw new IndexOutOfRangeException("index");
+            }
+
+            foreach (T item in other)
+            {
+                Add(item);
+            }
         }
 
         public void Insert(int index, System.Collections.Generic.IEnumerable<T> other, int length)
         {
-            if (index < 0 || index >= count)
+            if (index < 0 || index > count)
+            {
                 throw new IndexOutOfRangeException("index");
+            }
 
             if (count + length > buffer.Length)
-                Reserve(count + length);
-
-            /*Array.Copy(buffer, index, buffer, index + other.count, other.count);
-
-            Array.Copy(other.buffer, 0, other.buffer, index, other.count);*/
-
-            /*for(int i = 0; i < other.count; i++)
             {
-                buffer[i + index + other.count] = buffer[i + index];
-                buffer[i + index] = other.buffer[i];
-            }*/
+                Reserve(count + length);
+            }
 
             System.Collections.Generic.IEnumerator<T> enumer = other.GetEnumerator();
 
-            // Push all elements after index down the buffer
-            for (int i = index; i < length; i++)
+            if (index == count)
             {
-                if (enumer.MoveNext())
+                // Push all elements after index down the buffer
+                for (int i = index; i < index + length; i++)
                 {
-                    buffer[i + length] = buffer[i];
-                    buffer[i] = enumer.Current;
+                    if (enumer.MoveNext())
+                    {
+                        buffer[i] = enumer.Current;
+                        count++;
+
+                    }
+                    // The provided length was greater than that of the provided collection. This created a void
+                    // in the list and is undefined behavior
+                    else
+                    {
+                        throw new InvalidOperationException("length > length of other");
+                    }
                 }
-                // The provided length was greater than that of the provided collection. This created a void
-                // in the list and is undefined behavior
-                else
+            }
+            else
+            {
+                /*// Move all items down the list
+                for (int i = Count - 1; i >= index; i++)
                 {
-                    throw new InvalidOperationException("length > length of other");
+                    buffer[i] = buffer[i - length];
+                }
+                // Place the new items in the buffer
+                for (int i = 0; i < index; i++)
+                {
+                    if (enumer.MoveNext())
+                    {
+                        buffer[i + index] = enumer.Current;
+                        count++;
+                    }
+                    // The provided length was greater than that of the provided collection. This created a void
+                    // in the list and is undefined behavior
+                    else
+                    {
+                        throw new InvalidOperationException("length > length of other");
+                    }
+                }*/
+
+
+                // Push all elements after index down the buffer
+                for (int i = index; i < index + length; i++)
+                {
+                    if (enumer.MoveNext())
+                    {
+                        buffer[i + length] = buffer[i];
+                        buffer[i] = enumer.Current;
+                        count++;
+
+                    }
+                    // The provided length was greater than that of the provided collection. This created a void
+                    // in the list and is undefined behavior
+                    else
+                    {
+                        throw new InvalidOperationException("length > length of other");
+                    }
                 }
             }
         }
@@ -295,12 +402,16 @@ namespace ProjectWorlds.DataStructures.Lists
         public T TakeFirst()
         {
             if (count == 0)
+            {
                 throw new IndexOutOfRangeException("Empty list");
+            }
 
             T ret = buffer[0];
 
             for (int i = 1; i < count; i++)
+            {
                 buffer[i - 1] = buffer[i];
+            }
 
             count--;
             return ret;
@@ -309,12 +420,16 @@ namespace ProjectWorlds.DataStructures.Lists
         public T TakeAt(int index)
         {
             if (count == 0 || index >= count)
+            {
                 throw new IndexOutOfRangeException();
+            }
 
             T ret = buffer[index];
 
             for (int i = index + 1; i < count; i++)
+            {
                 buffer[i - 1] = buffer[i];
+            }
             count--;
             return ret;
         }
@@ -322,7 +437,9 @@ namespace ProjectWorlds.DataStructures.Lists
         public T TakeLast()
         {
             if (count == 0)
+            {
                 throw new IndexOutOfRangeException("Empty list");
+            }
 
             count--;
             return buffer[count];
@@ -335,7 +452,9 @@ namespace ProjectWorlds.DataStructures.Lists
                 if (buffer[i].Equals(item))
                 {
                     for (int j = i; j < count - 1; j++)
+                    {
                         buffer[j] = buffer[j + 1];
+                    }
                     count--;
                     return true;
                 }
@@ -355,7 +474,9 @@ namespace ProjectWorlds.DataStructures.Lists
                 if (buffer[i].Equals(item))
                 {
                     for (int j = i; j < count - 1; j++)
+                    {
                         buffer[j] = buffer[j + 1];
+                    }
                     count--;
                     return true;
                 }
@@ -502,7 +623,9 @@ namespace ProjectWorlds.DataStructures.Lists
         {
             string ret = "{ ";
             foreach (T it in this)
+            {
                 ret += it.ToString() + ", ";
+            }
             ret = ret.Remove(ret.Length - 2, 2);
             return ret + " } Count: " + count;
         }

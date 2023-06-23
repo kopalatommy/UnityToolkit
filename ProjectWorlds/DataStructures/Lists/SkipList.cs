@@ -129,7 +129,17 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public bool IsReadOnly => throw new NotImplementedException();
 
-        public T this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public T this[int index]
+        {
+            get
+            {
+                return Get(index);
+            }
+            set
+            {
+                Set(index, value);
+            }
+        }
 
         public SkipList()
         {
@@ -141,7 +151,7 @@ namespace ProjectWorlds.DataStructures.Lists
             return new Enumerator(this);
         }
 
-        public void Insert(T item)
+        public void Add(T item)
         {
             int key = item.GetHashCode();
             if (head == null)
@@ -383,11 +393,6 @@ namespace ProjectWorlds.DataStructures.Lists
             return ret;
         }
 
-        public void Add(T item)
-        {
-            Insert(item);
-        }
-
         public void CopyTo(T[] array, int arrayIndex)
         {
             foreach (T item in this)
@@ -404,10 +409,67 @@ namespace ProjectWorlds.DataStructures.Lists
         // Does not use index, only here for interface
         public void Set(int index, T value)
         {
-            Insert(value);
+            Add(value);
+        }
+
+        public T Get(int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            Node temp = head;
+            while (temp.down != null)
+            {
+                temp = temp.down;
+            }
+
+            for (; index > 0; index--)
+            {
+                temp = temp.next;
+            }
+            return temp.Value;
+        }
+
+        public T Front()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return head.Value;
+        }
+
+        public T Back()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            Node temp = head;
+            while (temp.down != null)
+            {
+                temp = temp.down;
+            }
+            while (temp.next != null)
+            {
+                temp = temp.next;
+            }
+            return temp.Value;
         }
 
         public void Add(IEnumerable<T> other)
+        {
+            foreach (T item in other)
+            {
+                Add(item);
+            }
+        }
+
+        public void Insert(int index, IEnumerable<T> other)
         {
             foreach (T item in other)
             {
@@ -420,6 +482,12 @@ namespace ProjectWorlds.DataStructures.Lists
             foreach (T item in other)
             {
                 Add(item);
+
+                index--;
+                if (index == 0)
+                {
+                    return;
+                }
             }
         }
 

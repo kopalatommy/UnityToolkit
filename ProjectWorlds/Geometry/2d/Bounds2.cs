@@ -3,7 +3,7 @@
 namespace ProjectWorlds.Geometry._2d
 {
     [System.Serializable]
-    public struct Bounds2d
+    public struct Bounds2
     {
         [SerializeField]
         private Vector2 center;
@@ -67,7 +67,7 @@ namespace ProjectWorlds.Geometry._2d
             }
         }
 
-        public Bounds2d(Vector2 center, Vector2 size)
+        public Bounds2(Vector2 center, Vector2 size)
         {
             if (size.x < 0)
             {
@@ -83,7 +83,7 @@ namespace ProjectWorlds.Geometry._2d
             this.halfExtents = size * 0.5f;
         }
 
-        public Bounds2d(Vector2[] verts)
+        public Bounds2(Vector2[] verts)
         {
             Vector2 max = verts[0];
             Vector2 min = verts[0];
@@ -114,7 +114,7 @@ namespace ProjectWorlds.Geometry._2d
             halfExtents = size * 0.5f;
         }
 
-        public bool Intersects(Bounds2d other)
+        public bool Intersects(Bounds2 other)
         {
             Vector2 maxDelta = halfExtents + other.halfExtents;
             Vector2 delta = center - other.center;
@@ -134,15 +134,15 @@ namespace ProjectWorlds.Geometry._2d
 
         public override bool Equals(object obj)
         {
-            return obj is Bounds2d && this == (Bounds2d)obj;
+            return obj is Bounds2 && this == (Bounds2)obj;
         }
 
-        public static bool operator ==(Bounds2d a, Bounds2d b)
+        public static bool operator ==(Bounds2 a, Bounds2 b)
         {
             return (a.Center == b.Center) && (a.halfExtents == b.halfExtents);
         }
 
-        public static bool operator !=(Bounds2d a, Bounds2d b)
+        public static bool operator !=(Bounds2 a, Bounds2 b)
         {
             return (a.Center != b.Center) || (a.halfExtents != b.halfExtents);
         }

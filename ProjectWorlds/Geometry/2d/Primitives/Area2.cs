@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace ProjectWorlds.Geometry._2d
 {
-    public class Area2d : MonoBehaviour
+    public class Area2 : MonoBehaviour
     {
-        public Area2d ParentArea
+        public Area2 ParentArea
         {
             get
             {
                 if (lastParent != transform.parent)
                 {
-                    parentArea = transform.parent.GetComponentInParent<Area2d>();
+                    parentArea = transform.parent.GetComponentInParent<Area2>();
                     lastParent = transform.parent;
                 }
                 return parentArea;
@@ -23,13 +23,13 @@ namespace ProjectWorlds.Geometry._2d
                 parentArea = value;
             }
         }
-        private Area2d parentArea;
+        private Area2 parentArea;
         private Transform lastParent;
         public float rotation;
         public Vector2 position;
 
-        public Polygon2d poly { get { return _poly; } set { _poly = value; CacheWorldVerts(); } }
-        [SerializeField] private Polygon2d _poly = Polygon2d.Quad;
+        public Polygon2 poly { get { return _poly; } set { _poly = value; CacheWorldVerts(); } }
+        [SerializeField] private Polygon2 _poly = Polygon2.Quad;
 
         /// <summary> Verts in world space. </summary>
         public Vector3[] Worldverts
@@ -68,7 +68,7 @@ namespace ProjectWorlds.Geometry._2d
             path = UnityEditor.FileUtil.GetProjectRelativePath(path);
             Mesh mesh = UnityEditor.AssetDatabase.LoadAssetAtPath<Mesh>(path);
             if (mesh == null) return;
-            poly = new Polygon2d(Array.ConvertAll(mesh.vertices, x => new Vector2(x.x, x.z)));
+            poly = new Polygon2(Array.ConvertAll(mesh.vertices, x => new Vector2(x.x, x.z)));
         }
 
 #endif
@@ -92,23 +92,23 @@ namespace ProjectWorlds.Geometry._2d
         }
 
         /// <summary> Project an area2D onto this one, and return the poly </summary>
-        public Polygon2d Project(Area2d area2d)
+        public Polygon2 Project(Area2 area2d)
         {
             Vector2[] verts = new Vector2[area2d.poly.Verts.Length];
             for (int i = 0; i < verts.Length; i++)
             {
                 verts[i] = WorldToLocal(area2d.LocalToWorld(area2d.poly.Verts[i]));
             }
-            return new Polygon2d(verts);
+            return new Polygon2(verts);
         }
 
         /// <summary> Check if this Area2D completely contains another Area2D. </summary>
         /// <param name="area2d"></param>
         /// <param name="collisionPadding">Used for collision distance threshold </param>
         /// <returns></returns>
-        public bool Contains(Area2d area2d, float tolerance)
+        public bool Contains(Area2 area2d, float tolerance)
         {
-            Polygon2d other = Project(area2d);
+            Polygon2 other = Project(area2d);
             return poly.Contains(other);
         }
 
@@ -173,13 +173,13 @@ namespace ProjectWorlds.Geometry._2d
     public static class Area2DExtensions
     {
         /// <summary> Returns the first Area2D that the ray passes through, if any. Otherwise returns closest Area2D </summary>
-        public static Area2d GetBestMatch(this IList<Area2d> area2dArray, Ray ray)
+        public static Area2 GetBestMatch(this IList<Area2> area2dArray, Ray ray)
         {
             bool directHit = false;
 
             float dist = 0;
             float closestDist = float.PositiveInfinity;
-            Area2d closestArea2d = null;
+            Area2 closestArea2d = null;
 
             for (int i = 0; i < area2dArray.Count; i++)
             {

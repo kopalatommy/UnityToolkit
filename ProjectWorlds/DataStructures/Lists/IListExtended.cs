@@ -4,7 +4,11 @@
     {
         public void Set(int index, T value);
 
+        public T Get(int index);
+
         public void Add(System.Collections.Generic.IEnumerable<T> other);
+
+        public void Insert(int index, System.Collections.Generic.IEnumerable<T> other);
 
         public void Insert(int index, System.Collections.Generic.IEnumerable<T> other, int length);
 
@@ -27,5 +31,9 @@
         public int LastIndexOf(T item);
 
         public T[] ToArray();
+
+        public T Front();
+
+        public T Back();
     }
 }

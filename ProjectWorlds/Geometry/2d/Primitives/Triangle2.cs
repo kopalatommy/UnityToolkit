@@ -3,7 +3,7 @@
 namespace ProjectWorlds.Geometry._2d
 {
     [System.Serializable]
-    public struct Triangle2d
+    public struct Triangle2
     {
         public Vector2 a { get { return _a; } }
         [SerializeField] 
@@ -37,7 +37,7 @@ namespace ProjectWorlds.Geometry._2d
         [SerializeField] 
         private float _area;
 
-        public Triangle2d(Vector2 a, Vector2 b, Vector2 c)
+        public Triangle2(Vector2 a, Vector2 b, Vector2 c)
         {
             _a = a;
             _b = b;
@@ -45,7 +45,7 @@ namespace ProjectWorlds.Geometry._2d
             _A = Vector2.Distance(b, c);
             _B = Vector2.Distance(a, c);
             _C = Vector2.Distance(a, c);
-            _area = Geometry2d.ShoelaceFormula(a, b, c);
+            _area = Geometry2.ShoelaceFormula(a, b, c);
         }
 
         public bool Contains(Vector2 p)
@@ -70,19 +70,19 @@ namespace ProjectWorlds.Geometry._2d
 
         public override bool Equals(System.Object obj)
         {
-            return obj is Triangle2d && this == (Triangle2d)obj;
+            return obj is Triangle2 && this == (Triangle2)obj;
         }
         public override int GetHashCode()
         {
             return a.GetHashCode() ^ b.GetHashCode() ^ c.GetHashCode();
         }
 
-        public static bool operator ==(Triangle2d a, Triangle2d b)
+        public static bool operator ==(Triangle2 a, Triangle2 b)
         {
             return (a.a == b.a) && (a.b == b.b) && (a.c == b.c);
         }
 
-        public static bool operator !=(Triangle2d a, Triangle2d b)
+        public static bool operator !=(Triangle2 a, Triangle2 b)
         {
             return !(a == b);
         }
