@@ -329,9 +329,9 @@ namespace ProjectWorlds.DataStructures.Lists
                 throw new IndexOutOfRangeException("index");
             }
 
-            if (count + length > buffer.Length)
+            if ((count + index + length + 1) > buffer.Length)
             {
-                Reserve(count + length);
+                Reserve(count + index + length + 1);
             }
 
             System.Collections.Generic.IEnumerator<T> enumer = other.GetEnumerator();
@@ -357,44 +357,15 @@ namespace ProjectWorlds.DataStructures.Lists
             }
             else
             {
-                /*// Move all items down the list
-                for (int i = Count - 1; i >= index; i++)
+                for (int i = count + length; i >= index + length; i--)
                 {
                     buffer[i] = buffer[i - length];
                 }
-                // Place the new items in the buffer
-                for (int i = 0; i < index; i++)
+
+                for (int i = 0; i < length && enumer.MoveNext(); i++)
                 {
-                    if (enumer.MoveNext())
-                    {
-                        buffer[i + index] = enumer.Current;
-                        count++;
-                    }
-                    // The provided length was greater than that of the provided collection. This created a void
-                    // in the list and is undefined behavior
-                    else
-                    {
-                        throw new InvalidOperationException("length > length of other");
-                    }
-                }*/
-
-
-                // Push all elements after index down the buffer
-                for (int i = index; i < index + length; i++)
-                {
-                    if (enumer.MoveNext())
-                    {
-                        buffer[i + length] = buffer[i];
-                        buffer[i] = enumer.Current;
-                        count++;
-
-                    }
-                    // The provided length was greater than that of the provided collection. This created a void
-                    // in the list and is undefined behavior
-                    else
-                    {
-                        throw new InvalidOperationException("length > length of other");
-                    }
+                    buffer[index + i] = enumer.Current;
+                    count++;
                 }
             }
         }

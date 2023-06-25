@@ -56,7 +56,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             {
                 if (list[99 - i] != i)
                 {
-                    UnityEngine.Debug.Log(list[i] + " != " + i);
+                    UnityEngine.Debug.Log(list[99 - i] + " != " + i + " - " + list);
                     return false;
                 }
             }
@@ -370,10 +370,63 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 
             list.Insert(0, toInsert, toInsert.Count);
 
-            for (int i = 0; i < 10; i++)
+            if (list.Count != 100)
+            {
+                UnityEngine.Debug.Log("InsertRangeTest2 failed @ 1: Count is wrong: " + list.Count + " != 100: " + list);
+                return false;
+            }
+
+            for (int i = 0; i < 100; i++)
             {
                 if (list[i] != i)
                 {
+                    UnityEngine.Debug.Log("InsertRangeTest2 failed @ 2: " + list[i] + " != " + i + " - " + list);
+                    return false;
+                }
+            }
+
+            return list.Count == 100;
+        }
+
+        [RunTest(true)]
+        public bool InsertRangeTest2B()
+        {
+            T list = CreateListDefault();
+            T toInsert = CreateListDefault();
+
+            for (int i = 0; i < 5; i++)
+            {
+                list.Add(i);
+            }
+
+            for (int i = 5; i < 95; i++)
+            {
+                toInsert.Add(i);
+            }
+
+            for (int i = 95; i < 100; i++)
+            {
+                list.Add(i);
+            }
+
+            list.Insert(5, toInsert, toInsert.Count);
+
+            if (list.Count != 100)
+            {
+                UnityEngine.Debug.Log("InsertRangeTest2B failed @ 1: Count is wrong: " + list.Count + " != 100: " + list);
+                UnityEngine.Debug.Log(list);
+                return false;
+            }
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (list[i] != i)
+                {
+                    UnityEngine.Debug.Log("InsertRangeTest2B failed @ 2: " + list[i] + " != " + i + " - " + list);
+/*                    foreach (int t in list)
+                    {
+                        UnityEngine.Debug.Log(t);
+                    }*/
                     return false;
                 }
             }
@@ -772,7 +825,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
                 }
                 else if (i != list.Count)
                 {
-                    UnityEngine.Debug.Log("TakeLastTest1 failed @ 2");
+                    UnityEngine.Debug.Log("TakeLastTest1 failed @ 2: Count: " + list.Count + " != " + i);
                     return false;
                 }
             }

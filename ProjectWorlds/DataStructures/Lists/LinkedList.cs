@@ -34,20 +34,17 @@ namespace ProjectWorlds.DataStructures.Lists
 
             public bool MoveNext()
             {
+                if (starting)
+                {
+                    starting = false;
+                    currentNode = list.head;
+                    return currentNode != null;
+                }
+
                 if (currentNode != null)
                 {
-                    if (starting)
-                    {
-                        starting = false;
-                        currentNode = list.head;
-                        return true;
-                    }
-                    else if (currentNode.next != null)
-                    {
-                        currentNode = currentNode.next;
-                        return true;
-                    }
-                    return false;
+                    currentNode = currentNode.next;
+                    return currentNode != null;
                 }
                 else
                 {
@@ -324,8 +321,10 @@ namespace ProjectWorlds.DataStructures.Lists
             }
             else
             {
-                if (index < 0 || index >= count)
+                if (index < 0 || index > count)
+                {
                     throw new IndexOutOfRangeException();
+                }
 
                 Node cur = GoTo(head, index - 1);
                 cur.next = new Node(item, cur.next);
@@ -352,7 +351,12 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public void Insert(int index, IEnumerable<T> other, int length)
         {
-            Node temp = head != null ? GoTo(head, index) : null;
+            if (index < 0 || index > count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            Node temp = (index == 0) ? head : GoTo(head, index - 1);
             foreach (T item in other)
             {
                 if (temp == null)
@@ -362,6 +366,7 @@ namespace ProjectWorlds.DataStructures.Lists
                 else
                 {
                     temp.next = new Node(item, temp.next);
+                    temp = temp.next;
                 }
                 count++;
                 if (--length == 0)
@@ -422,33 +427,29 @@ namespace ProjectWorlds.DataStructures.Lists
         public bool Remove(T item)
         {
             if (head == null)
+            {
                 return false;
+            }
+            if (head.item.Equals(item))
+            {
+                head = head.next;
+                count--;
+                return true;
+            }
             else
             {
                 Node cur = head;
 
-                if (cur.next.item.Equals(item))
+                while (cur.next != null)
                 {
-                    count--;
-                    head = cur.next;
-                    cur = cur.next;
-                    return true;
-                }
-                else
-                {
-                    while (cur.next != null)
+                    if (cur.next.item.Equals(item))
                     {
-                        if (cur.next.item.Equals(item))
-                        {
-                            cur.next = cur.next.next;
-                            count--;
-                            return true;
-                        }
-                        cur = cur.next;
+                        cur.next = cur.next.next;
+                        count--;
+                        return true;
                     }
                 }
                 return false;
-                //return RemoveRecurse(item, head);
             }
         }
 
@@ -643,24 +644,28 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public T TakeLast()
         {
-            if (head == null)
+            if (count == 0)
             {
-                throw new System.IndexOutOfRangeException("The list is empty");
+                throw new IndexOutOfRangeException();
             }
-            else if (count == 1)
+            if (count == 1)
             {
-                Node temp = head;
+                Node t = head;
                 head = null;
-                count--;
-                return temp.item;
+                count = 0;
+                return t.item;
             }
             else
             {
-                Node prev = GoTo(head, count - 1);
-                Node temp = prev.next;
-                prev.next = null;
+                Node temp = head;
+                while (temp.next.next != null)
+                {
+                    temp = temp.next;
+                }
+                Node t = temp.next;
+                temp.next = null;
                 count--;
-                return temp.item;
+                return t.item;
             }
         }
 

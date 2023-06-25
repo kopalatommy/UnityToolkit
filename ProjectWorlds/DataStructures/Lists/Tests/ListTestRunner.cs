@@ -8,7 +8,8 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
     {
         ArrayListTester arrayListTester;
         CircularListTester circularListTester;
-
+        DoubleLinkedListTester doubleLinkedListTester;
+        LinkedListTester linkedListTester;
         private void Start()
         {
             arrayListTester = new ArrayListTester();
@@ -17,6 +18,11 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             circularListTester = new CircularListTester();
             circularListTester.RunTests(false, 600000);
 
+            doubleLinkedListTester = new DoubleLinkedListTester();
+            doubleLinkedListTester.RunTests(false, 60000);
+
+            linkedListTester = new LinkedListTester();
+            linkedListTester.RunTests(false, 60000);
         }
     }
 }

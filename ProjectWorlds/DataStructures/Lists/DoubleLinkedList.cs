@@ -22,20 +22,17 @@ namespace ProjectWorlds.DataStructures.Lists
 
             public bool MoveNext()
             {
+                if (starting)
+                {
+                    starting = false;
+                    currentNode = list.head;
+                    return currentNode != null;
+                }
+
                 if (currentNode != null)
                 {
-                    if (starting)
-                    {
-                        starting = false;
-                        currentNode = list.head;
-                        return true;
-                    }
-                    else if (currentNode.Next != null)
-                    {
-                        currentNode = currentNode.Next;
-                        return true;
-                    }
-                    return false;
+                    currentNode = currentNode.Next;
+                    return currentNode != null;
                 }
                 else
                 {
@@ -321,7 +318,7 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public virtual void Add(T item)
         {
-            AppendFront(item);
+            AppendBack(item);
         }
 
         public virtual void AppendFront(T item)
@@ -374,7 +371,7 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public virtual void Insert(int index, T item)
         {
-            if (index < 0 || index >= count)
+            if (index < 0 || index > count)
             {
                 throw new IndexOutOfRangeException("index");
             }
@@ -459,29 +456,71 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public virtual void Insert(int index, IEnumerable<T> other, int length)
         {
+            if (index < 0 || index > count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             if (index == 0)
             {
-                Add(other);
+                Node temp = null;
+                Node newHead = null;
+                foreach (T item in other)
+                {
+                    temp = new Node(item, temp, null);
+                    count++;
+
+                    if (newHead == null)
+                    {
+                        newHead = temp;
+                    }
+
+                    length--;
+                    if (length == 0)
+                    {
+                        break;
+                    }
+                }
+                temp.Next = head;
+                if (head != null)
+                {
+                    head.Prev = temp;
+                }
+                else
+                {
+                    tail = temp;
+                }
+                head = newHead;
             }
             else if (index == count)
             {
-                AppendBack(other);
+                foreach (T item in other)
+                {
+                    tail = new Node(item, tail, null);
+                    count++;
+
+                    length--;
+                    if (length == 0)
+                    {
+                        return;
+                    }
+                }
             }
             else
             {
                 Node cur;
                 if (index < count / 2)
                 {
-                    cur = GoToForward(head, index - 1);
+                    cur = GoToForward(head, index);
                 }
                 else
                 {
-                    cur = GoToReverse(tail, count - index - 1);
+                    cur = GoToReverse(tail, count - index);
                 }
                 foreach (T item in other)
                 {
                     /*cur = cur.Next = cur.Next.Prev =*/
-                    new Node(item, cur, cur.Next);
+                    cur = new Node(item, cur, cur.Next);
                     count++;
                 }
             }
@@ -542,7 +581,7 @@ namespace ProjectWorlds.DataStructures.Lists
         {
             if (count == 0)
             {
-                throw new Exception("Index out of bounds");
+                throw new IndexOutOfRangeException();
             }
             else
             {
@@ -554,8 +593,11 @@ namespace ProjectWorlds.DataStructures.Lists
                 }
                 else
                 {
-                    tail.Prev = null;
+                    tail = tail.Prev;
+                    tail.Next.Prev = null;
+                    tail.Next = null;
                 }
+                count--;
                 return item;
             }
         }
@@ -775,7 +817,7 @@ namespace ProjectWorlds.DataStructures.Lists
         public int LastIndexOf(T item)
         {
             Node cur = tail;
-            int ind = 0;
+            int ind = Count - 1;
             while (cur != null)
             {
                 if (cur.item.Equals(item))
@@ -784,7 +826,7 @@ namespace ProjectWorlds.DataStructures.Lists
                 }
                 else
                 {
-                    ind++;
+                    ind--;
                     cur = cur.Prev;
                 }
             }
@@ -860,7 +902,7 @@ namespace ProjectWorlds.DataStructures.Lists
                 }
                 cur = cur.Next;
             }
-            return ret + " } Count: " + count + "\nH: " + head.item;
+            return ret + " } Count: " + count;
         }
 
         public T[] ToArray()
