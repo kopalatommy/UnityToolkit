@@ -27,6 +27,7 @@ namespace ProjectWorlds.DataStructures.Lists
             protected SkipList<T> list = null;
             protected Node cur = null;
             protected bool isDisposed = false;
+            private bool starting = true;
 
             public Enumerator(SkipList<T> list)
             {
@@ -36,25 +37,34 @@ namespace ProjectWorlds.DataStructures.Lists
 
             public bool MoveNext()
             {
-                if (cur == null)
+                if (starting)
                 {
-                    cur = list.Head;
+                    starting = false;
+                    cur = list.head;
+
                     while (cur != null && cur.down != null)
+                    {
                         cur = cur.down;
-                    return true;
+                    }
+
+                    return cur != null;
                 }
-                else if (cur.next != null)
+
+                if (cur != null)
                 {
                     cur = cur.next;
-                    return true;
+                    return cur != null;
                 }
                 else
+                {
                     return false;
+                }
             }
 
             public void Reset()
             {
                 cur = null;
+                starting = true;
             }
 
             public void Dispose()
@@ -160,11 +170,24 @@ namespace ProjectWorlds.DataStructures.Lists
                 head = new Node(key, item, null, null);
                 head.Height = height;
             }
+            else if (item.GetHashCode() < head.Value.GetHashCode())
+            {
+                T oldHead = head.Value;
+
+                Node temp = head;
+                while (temp != null)
+                {
+                    temp.Value = item;
+                    temp.Key = key;
+                    temp = temp.down;
+                }
+
+                Add(oldHead);
+            }
             else
             {
                 int height = DetermineNodeHeight();
                 Node cur = head;
-
 
                 // Go to the new node's height
                 while (cur.Height > height)
@@ -185,16 +208,22 @@ namespace ProjectWorlds.DataStructures.Lists
                     cur.next = new Node(key, item, cur.next, null);
                     cur.next.Height = cur.Height;
                     if (created == null)
+                    {
                         created = cur.next;
+                    }
                     else
                     {
                         created.down = cur.next;
                         created = created.down;
                     }
                     if (cur.down != null)
+                    {
                         cur = cur.down;
+                    }
                     else
+                    {
                         break;
+                    }
                 }
                 count++;
             }
@@ -328,13 +357,17 @@ namespace ProjectWorlds.DataStructures.Lists
 
             Node cur = head;
             while (cur.down != null)
+            {
                 cur = cur.down;
+            }
 
             while (cur != null)
             {
                 ret += cur.Value.ToString();
                 if (cur.next != null)
+                {
                     ret += ", ";
+                }
                 cur = cur.next;
             }
             return ret + " } Count: " + count;
@@ -483,8 +516,8 @@ namespace ProjectWorlds.DataStructures.Lists
             {
                 Add(item);
 
-                index--;
-                if (index == 0)
+                length--;
+                if (length == 0)
                 {
                     return;
                 }
@@ -493,216 +526,271 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public T TakeFirst()
         {
-            if (head == null)
+            if (count == 0)
             {
-                return default(T);
+                throw new IndexOutOfRangeException();
             }
 
-            T temp = head.Value;
-            Remove(temp);
-            return temp;
+            if (count == 1)
+            {
+                T item = head.Value;
+                Clear();
+                return item;
+            }
+            else
+            {
+                // Get the next node in the list
+                Node next = head;
+                T item = head.Value;
+                while (next.down != null)
+                {
+                    next = next.down;
+                }
+                next = next.next;
+
+
+                // Remove the next node from the list
+                Node temp = head;
+                while (temp != null)
+                {
+                    temp.Value = next.Value;
+                    temp.Key = next.Key;
+
+                    if (temp.next != null && temp.next.Key == next.Key)
+                    {
+                        temp.next = temp.next.next;
+                    }
+                    temp = temp.down;
+                }
+                count--;
+                return item;
+            }
         }
 
         public T TakeAt(int index)
         {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             if (index == 0)
             {
-                T temp = head.Value;
                 if (count == 1)
                 {
-                    head = null;
+                    T item = head.Value;
+                    Clear();
+                    return item;
                 }
                 else
                 {
-                    // Get the bottom node for this column
-                    Node bottom = head;
-                    while (bottom.down != null)
+                    // Get the next node in the list
+                    Node next = head;
+                    T item = head.Value;
+                    while (next.down != null)
                     {
-                        bottom = bottom.down;
+                        next = next.down;
                     }
+                    next = next.next;
 
-                    // Get the next item in the list
-                    T next = bottom.next.Value;
-                    bottom = head;
-                    // Go over all nodes, and replace the current column with
-                    // the next item. Drop the next column from the list
-                    while (bottom.down != null)
+
+                    // Remove the next node from the list
+                    Node temp = head;
+                    while (temp != null)
                     {
-                        // Replace item in coulumn
-                        bottom.Value = next;
-                        // Drop the next node if the node contains the next item
-                        if (bottom.next.Value.Equals(next))
+                        temp.Value = next.Value;
+                        temp.Key = next.Key;
+
+                        if (temp.next != null && temp.next.Key == next.Key)
                         {
-                            bottom.next = bottom.next.next;
+                            temp.next = temp.next.next;
                         }
+                        temp = temp.down;
                     }
-                    
+                    count--;
+                    return item;
                 }
-                count--;
-                return temp;
             }
-            else
+
+            // Get the item to be removed
+            Node toRemove = head;
+            while (toRemove.down != null)
             {
-                Node last = head;
-                // Move to bottom row
-                while (last.down != null)
-                {
-                    last = last.down;
-                }
-
-                // Move to second to last node
-                for (; index > 0; index--)
-                {
-                    last = last.next;
-                }
-                Node toRemove = last.next;
-
-                Node top = head;
-                while (top.Value.GetHashCode() < last.Value.GetHashCode())
-                {
-                    top = top.next;
-                }
-
-                Node tNode = top;
-                while (tNode.down != null)
-                {
-                    tNode = tNode.down;
-                }
-                if (tNode == last)
-                {
-                    while (top != null)
-                    {
-                        if (top.next.Value.Equals(toRemove.Value))
-                        {
-                            top.next = top.next.next;
-                        }
-                        top = top.down;
-                    }
-                }
-
-                count--;
-                return toRemove.Value;
+                toRemove = toRemove.down;
             }
+
+            for (; index > 0; index--)
+            {
+                toRemove = toRemove.next;
+            }
+
+            Node highest = head;
+            while (highest != null)
+            {
+                if (highest.next == null)
+                {
+                    highest = highest.down;
+                }
+                else if (highest.next.Key < toRemove.Key)
+                {
+                    highest = highest.next;
+                }
+                else if (highest.next.Key > toRemove.Key)
+                {
+                    highest = highest.down;
+                }
+                else
+                {
+                    highest.next = highest.next.next;
+                    highest = highest.down;
+                }
+            }
+            count--;
+            return toRemove.Value;
         }
 
         public T TakeLast()
         {
-            Node last = head;
-            // Move to bottom row
-            while (last.down != null)
+            if (count == 0)
             {
-                last = last.down;
+                throw new IndexOutOfRangeException();
             }
 
-            // Move to second to last node
-            for (int index = count; index > 0; index--)
+            // Get the item to be removed
+            Node toRemove = head;
+            while (toRemove.down != null)
             {
-                last = last.next;
-            }
-            Node toRemove = last.next;
-
-            Node top = head;
-            while (top.Value.GetHashCode() < last.Value.GetHashCode())
-            {
-                top = top.next;
+                toRemove = toRemove.down;
             }
 
-            Node tNode = top;
-            while (tNode.down != null)
+            for (int index = count - 1; index > 0; index--)
             {
-                tNode = tNode.down;
+                toRemove = toRemove.next;
             }
-            if (tNode == last)
+
+            Node highest = head;
+            while (highest.Key < toRemove.Key)
             {
-                while (top != null)
+                if (highest.next != null)
                 {
-                    if (top.next.Value.Equals(toRemove.Value))
-                    {
-                        top.next = top.next.next;
-                    }
-                    top = top.down;
+                    highest = highest.next;
+                }
+                else
+                {
+                    highest = highest.down;
                 }
             }
 
+            // Perform the actual removal
+            while (highest != null)
+            {
+                if (highest.next == null)
+                {
+                    highest = highest.down;
+                }
+                else if (highest.next.Key == toRemove.Key)
+                {
+                    highest.next = highest.next.next;
+                    highest = highest.down;
+                }
+                else
+                {
+                    highest = highest.next;
+                }
+            }
             count--;
             return toRemove.Value;
         }
 
         public void RemoveFirst()
         {
-            T temp = head.Value;
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             if (count == 1)
             {
-                head = null;
+                Clear();
             }
             else
             {
-                // Get the bottom node for this column
-                Node bottom = head;
-                while (bottom.down != null)
+                // Get the next node in the list
+                Node next = head;
+                T item = head.Value;
+                while (next.down != null)
                 {
-                    bottom = bottom.down;
+                    next = next.down;
                 }
+                next = next.next;
 
-                // Get the next item in the list
-                T next = bottom.next.Value;
-                bottom = head;
-                // Go over all nodes, and replace the current column with
-                // the next item. Drop the next column from the list
-                while (bottom.down != null)
+
+                // Remove the next node from the list
+                Node temp = head;
+                while (temp != null)
                 {
-                    // Replace item in coulumn
-                    bottom.Value = next;
-                    // Drop the next node if the node contains the next item
-                    if (bottom.next.Value.Equals(next))
+                    temp.Value = next.Value;
+                    temp.Key = next.Key;
+
+                    if (temp.next != null && temp.next.Key == next.Key)
                     {
-                        bottom.next = bottom.next.next;
+                        temp.next = temp.next.next;
                     }
+                    temp = temp.down;
                 }
-
+                count--;
             }
-            count--;
         }
 
         public void RemoveLast()
         {
-            Node last = head;
-            // Move to bottom row
-            while (last.down != null)
+            if (count == 0)
             {
-                last = last.down;
+                throw new IndexOutOfRangeException();
             }
 
-            // Move to second to last node
-            for (int index = count; index > 0; index--)
+            // Get the item to be removed
+            Node toRemove = head;
+            while (toRemove.down != null)
             {
-                last = last.next;
-            }
-            Node toRemove = last.next;
-
-            Node top = head;
-            while (top.Value.GetHashCode() < last.Value.GetHashCode())
-            {
-                top = top.next;
+                toRemove = toRemove.down;
             }
 
-            Node tNode = top;
-            while (tNode.down != null)
+            for (int index = count - 1; index > 0; index--)
             {
-                tNode = tNode.down;
+                toRemove = toRemove.next;
             }
-            if (tNode == last)
+
+            Node highest = head;
+            while (highest.Key < toRemove.Key)
             {
-                while (top != null)
+                if (highest.next != null)
                 {
-                    if (top.next.Value.Equals(toRemove.Value))
-                    {
-                        top.next = top.next.next;
-                    }
-                    top = top.down;
+                    highest = highest.next;
+                }
+                else
+                {
+                    highest = highest.down;
                 }
             }
 
+            // Perform the actual removal
+            while (highest != null)
+            {
+                if (highest.next == null)
+                {
+                    highest = highest.down;
+                }
+                else if (highest.next.Key == toRemove.Key)
+                {
+                    highest.next = highest.next.next;
+                    highest = highest.down;
+                }
+                else
+                {
+                    highest = highest.next;
+                }
+            }
             count--;
         }
 
@@ -912,6 +1000,11 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public int FirstIndexOf(T item)
         {
+            if (count == 0)
+            {
+                return -1;
+            }
+
             int hashCode = item.GetHashCode();
             Node temp = head;
             while (temp.down != null)
@@ -952,42 +1045,31 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public int LastIndexOf(T item)
         {
+            if (count == 0)
+            {
+                return -1;
+            }
+
             int hashCode = item.GetHashCode();
+
             Node temp = head;
             while (temp.down != null)
             {
                 temp = temp.down;
             }
 
-            int index = -1;
-            while (item != null)
+            int indexToReturn = -1;
+            int index = 0;
+            while (temp != null)
             {
-                if (temp.Value.GetHashCode() < hashCode)
+                if (temp.Key == hashCode)
                 {
-                    // Before item in list
-                    temp = temp.next;
+                    indexToReturn = index;
                 }
-                else if (temp.Value.GetHashCode() == hashCode)
-                {
-                    // Could be item
-                    if (temp.Value.Equals(item))
-                    {
-                        return index + 1;
-                    }
-                    else
-                    {
-                        temp = temp.next;
-                    }
-                }
-                else
-                {
-                    // Item not in list
-                    return -1;
-                }
-
                 index++;
+                temp = temp.next;
             }
-            return index;
+            return indexToReturn;
         }
 
         public T[] ToArray()
@@ -1001,7 +1083,9 @@ namespace ProjectWorlds.DataStructures.Lists
             int index = 0;
             while (temp != null)
             {
+                // UnityEngine.Debug.Log(index + " / " + Count + " - " + temp.Value);
                 array[index++] = temp.Value;
+                temp = temp.next;
             }
             return array;
         }

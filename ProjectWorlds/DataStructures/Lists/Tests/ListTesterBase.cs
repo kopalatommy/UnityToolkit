@@ -22,7 +22,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Get
 
         [RunTest(true)]
-        public bool GetTest1()
+        public virtual bool GetTest1()
         {
             T list = CreateListDefault();
 
@@ -43,7 +43,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool GetTest2()
+        public virtual bool GetTest2()
         {
             T list = CreateListDefault();
 
@@ -65,7 +65,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool GetTest3()
+        public virtual bool GetTest3()
         {
             T list = CreateListDefault();
 
@@ -81,7 +81,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool GetTest4()
+        public virtual bool GetTest4()
         {
             T list = CreateListDefault();
 
@@ -101,7 +101,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Set
 
         [RunTest(true)]
-        protected bool SetTest1()
+        public virtual bool SetTest1()
         {
             T list = CreateListDefault();
 
@@ -118,7 +118,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 
         [RunTest(true)]
         // Test for the proper exception
-        protected bool SetTest2()
+        public virtual bool SetTest2()
         {
             T list = CreateListDefault();
 
@@ -140,7 +140,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 
         [RunTest(true)]
         // Test for the proper exception
-        protected bool SetTest3()
+        public virtual bool SetTest3()
         {
             T list = CreateListDefault();
 
@@ -157,7 +157,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 
         [RunTest(true)]
         // Test for the proper exception
-        protected bool SetTest4()
+        public virtual bool SetTest4()
         {
             T list = CreateListDefault();
 
@@ -174,7 +174,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 
         [RunTest(true)]
         // Test setting each index
-        protected bool SetTest5()
+        public virtual bool SetTest5()
         {
             T list = CreateListDefault();
 
@@ -204,7 +204,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Add
 
         [RunTest(true)]
-        public bool AddTest1()
+        public virtual bool AddTest1()
         {
             T list = CreateListDefault();
 
@@ -217,7 +217,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool AddTest2()
+        public virtual bool AddTest2()
         {
             T list = CreateListDefault();
 
@@ -242,7 +242,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Insert
 
         [RunTest(true)]
-        public bool InsertTest1()
+        public virtual bool InsertTest1()
         {
             T list = CreateListDefault();
 
@@ -268,7 +268,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertTest2()
+        public virtual bool InsertTest2()
         {
             T list = CreateListDefault();
 
@@ -291,7 +291,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertTest3()
+        public virtual bool InsertTest3()
         {
             T list = CreateListDefault();
 
@@ -307,7 +307,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertTest4()
+        public virtual bool InsertTest4()
         {
             T list = CreateListDefault();
 
@@ -327,7 +327,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Insert Range
 
         [RunTest(true)]
-        public bool InsertRangeTest1()
+        public virtual bool InsertRangeTest1()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -358,7 +358,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertRangeTest2()
+        public virtual bool InsertRangeTest2()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -389,7 +389,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertRangeTest2B()
+        public virtual bool InsertRangeTest2B()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -435,7 +435,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertRangeTest3()
+        public virtual bool InsertRangeTest3()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -457,7 +457,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertRangeTest4()
+        public virtual bool InsertRangeTest4()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -479,7 +479,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool InsertRangeTest5()
+        public virtual bool InsertRangeTest5()
         {
             T list = CreateListDefault();
             T toInsert = CreateListDefault();
@@ -511,7 +511,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Take First
 
         [RunTest(true)]
-        public bool TakeFirstTest1()
+        public virtual bool TakeFirstTest1()
         {
             T list = CreateListDefault();
 
@@ -532,7 +532,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool TakeFirstTest2()
+        public virtual bool TakeFirstTest2()
         {
             T list = CreateListDefault();
 
@@ -548,7 +548,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool TakeFirstTest3()
+        public virtual bool TakeFirstTest3()
         {
             T list = CreateListDefault();
 
@@ -575,7 +575,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Take At
 
         [RunTest(true)]
-        public bool TakeAtTest1()
+        public virtual bool TakeAtTest1()
         {
             T list = CreateListDefault();
 
@@ -604,7 +604,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             {
                 if (list[i] != (i + 1))
                 {
-                    UnityEngine.Debug.Log("TakeAtTest1 failed @ 2: " + list[i] + " != " + (i + 1));
+                    UnityEngine.Debug.Log("TakeAtTest1 failed @ 2: " + list[i] + " != " + (i + 1) + " - " + list);
                     return false;
                 }
             }
@@ -613,7 +613,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool TakeAtTest2()
+        public virtual bool TakeAtTest2()
         {
             T list = CreateListDefault();
 
@@ -806,7 +806,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Take Last
 
         [RunTest(true)]
-        public bool TakeLastTest1()
+        public virtual bool TakeLastTest1()
         {
             T list = CreateListDefault();
 
@@ -834,7 +834,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool TaketLastTest2()
+        public virtual bool TaketLastTest2()
         {
             T list = CreateListDefault();
 
@@ -850,7 +850,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool TakeLastTest3()
+        public virtual bool TakeLastTest3()
         {
             T list = CreateListDefault();
 
@@ -877,7 +877,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Remove First
 
         [RunTest(true)]
-        public bool RemoveFirstTest1()
+        public virtual bool RemoveFirstTest1()
         {
             T list = CreateListDefault();
 
@@ -899,7 +899,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoveFirstTest2()
+        public virtual bool RemoveFirstTest2()
         {
             T list = CreateListDefault();
 
@@ -915,7 +915,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoveFirstTest3()
+        public virtual bool RemoveFirstTest3()
         {
             T list = CreateListDefault();
 
@@ -942,7 +942,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Remove Last
 
         [RunTest(true)]
-        public bool RemoveLastTest1()
+        public virtual bool RemoveLastTest1()
         {
             T list = CreateListDefault();
 
@@ -970,7 +970,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoeFirstLastTest2()
+        public virtual bool RemoeFirstLastTest2()
         {
             T list = CreateListDefault();
 
@@ -986,7 +986,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoveLastTest3()
+        public virtual bool RemoveLastTest3()
         {
             T list = CreateListDefault();
 
@@ -1134,7 +1134,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Remove
 
         [RunTest(true)]
-        public bool RemoveTest1()
+        public virtual bool RemoveTest1()
         {
             T list = CreateListDefault();
 
@@ -1171,7 +1171,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoveTest2()
+        public virtual bool RemoveTest2()
         {
             T list = CreateListDefault();
 
@@ -1200,7 +1200,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool RemoveTest3()
+        public virtual bool RemoveTest3()
         {
             T list = CreateListDefault();
 
@@ -1222,7 +1222,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region First Index Of
 
         [RunTest(true)]
-        public bool FirstIndexOfTest1()
+        public virtual bool FirstIndexOfTest1()
         {
             T list = CreateListDefault();
 
@@ -1230,7 +1230,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool FirstIndexOfTest2()
+        public virtual bool FirstIndexOfTest2()
         {
             T list = CreateListDefault();
 
@@ -1243,7 +1243,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool FirstIndexOfTest3()
+        public virtual bool FirstIndexOfTest3()
         {
             T list = CreateListDefault();
 
@@ -1256,7 +1256,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool FirstIndexOfTest4()
+        public virtual bool FirstIndexOfTest4()
         {
             T list = CreateListDefault();
 
@@ -1269,7 +1269,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool FirstIndexOfTest5()
+        public virtual bool FirstIndexOfTest5()
         {
             T list = CreateListDefault();
 
@@ -1287,7 +1287,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Last Index Of
 
         [RunTest(true)]
-        public bool LastIndexOfTest1()
+        public virtual bool LastIndexOfTest1()
         {
             T list = CreateListDefault();
 
@@ -1295,7 +1295,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool LastIndexOfTest2()
+        public virtual bool LastIndexOfTest2()
         {
             T list = CreateListDefault();
 
@@ -1308,7 +1308,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool LastIndexOfTest3()
+        public virtual bool LastIndexOfTest3()
         {
             T list = CreateListDefault();
 
@@ -1321,7 +1321,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool LastIndexOfTest4()
+        public virtual bool LastIndexOfTest4()
         {
             T list = CreateListDefault();
 
@@ -1334,7 +1334,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool LastIndexOfTest5()
+        public virtual bool LastIndexOfTest5()
         {
             T list = CreateListDefault();
 
@@ -1352,7 +1352,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region To Array
 
         [RunTest(true)]
-        public bool ToArrayTest1()
+        public virtual bool ToArrayTest1()
         {
             T list = CreateListDefault();
 
@@ -1367,6 +1367,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             {
                 if (arr[i] != list[i])
                 {
+                    UnityEngine.Debug.Log("ToArrayTest1 failed @ 1: " + arr + " - " + list);
                     return false;
                 }
             }
@@ -1375,7 +1376,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ToArrayTest2()
+        public virtual bool ToArrayTest2()
         {
             T list = CreateListDefault();
 
@@ -1403,7 +1404,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Enumerator
 
         [RunTest(true)]
-        public bool  EnumeratorTest1()
+        public virtual bool  EnumeratorTest1()
         {
             T list = CreateListDefault();
 
@@ -1426,7 +1427,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool EnumeratorTest2()
+        public virtual bool EnumeratorTest2()
         {
             T list = CreateListDefault();
 
@@ -1449,7 +1450,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool EnumeratorTest3()
+        public virtual bool EnumeratorTest3()
         {
             T list = CreateListDefault();
 
@@ -1467,7 +1468,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool EnumeratorTest4()
+        public virtual bool EnumeratorTest4()
         {
             T list = CreateListDefault();
 
@@ -1500,7 +1501,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool EnumeratorTest5()
+        public virtual bool EnumeratorTest5()
         {
             T list = CreateListDefault();
 
@@ -1537,7 +1538,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Contains
 
         [RunTest(true)]
-        public bool ContainsTest1()
+        public virtual bool ContainsTest1()
         {
             T list = CreateListDefault();
 
@@ -1558,7 +1559,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ContainsTest2()
+        public virtual bool ContainsTest2()
         {
             T list = CreateListDefault();
 
@@ -1579,7 +1580,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ContainsTest3()
+        public virtual bool ContainsTest3()
         {
             T list = CreateListDefault();
 
@@ -1592,7 +1593,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ContainsTest4()
+        public virtual bool ContainsTest4()
         {
             T list = CreateListDefault();
 
@@ -1605,7 +1606,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ContainsTest5()
+        public virtual bool ContainsTest5()
         {
             T list = CreateListDefault();
 
@@ -1617,7 +1618,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         #region Clear
 
         [RunTest(true)]
-        public bool ClearTest1()
+        public virtual bool ClearTest1()
         {
             T list = CreateListDefault();
 
@@ -1627,7 +1628,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ClearTest2()
+        public virtual bool ClearTest2()
         {
             T list = CreateListDefault();
 
@@ -1642,7 +1643,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         }
 
         [RunTest(true)]
-        public bool ClearTest3()
+        public virtual bool ClearTest3()
         {
             T list = CreateListDefault();
 

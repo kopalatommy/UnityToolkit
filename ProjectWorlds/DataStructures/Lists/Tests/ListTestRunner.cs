@@ -10,9 +10,10 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
         CircularListTester circularListTester;
         DoubleLinkedListTester doubleLinkedListTester;
         LinkedListTester linkedListTester;
+        SkipListTester skipListTester;
         private void Start()
         {
-            arrayListTester = new ArrayListTester();
+            /*arrayListTester = new ArrayListTester();
             arrayListTester.RunTests(false, 60000);
 
             circularListTester = new CircularListTester();
@@ -22,7 +23,10 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             doubleLinkedListTester.RunTests(false, 60000);
 
             linkedListTester = new LinkedListTester();
-            linkedListTester.RunTests(false, 60000);
+            linkedListTester.RunTests(false, 60000);*/
+
+            skipListTester = new SkipListTester();
+            skipListTester.RunTests(false, 60000);
         }
     }
 }

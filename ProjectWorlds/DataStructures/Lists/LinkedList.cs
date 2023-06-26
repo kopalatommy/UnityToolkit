@@ -426,7 +426,7 @@ namespace ProjectWorlds.DataStructures.Lists
         /// <returns>True if the item was removed</returns>
         public bool Remove(T item)
         {
-            if (head == null)
+            if (count == 0)
             {
                 return false;
             }
@@ -448,6 +448,7 @@ namespace ProjectWorlds.DataStructures.Lists
                         count--;
                         return true;
                     }
+                    cur = cur.next;
                 }
                 return false;
             }
@@ -705,7 +706,7 @@ namespace ProjectWorlds.DataStructures.Lists
         {
             int index = 0;
             Node temp = head;
-            for (; head != null; index++)
+            for (; temp != null; index++, temp = temp.next)
             {
                 if (item.Equals(temp.item))
                 {
@@ -717,17 +718,17 @@ namespace ProjectWorlds.DataStructures.Lists
 
         public int LastIndexOf(T item)
         {
-            int c = 0;
-            int index = -1;
-            foreach (T value in this)
+            int index = 0;
+            int foundIndex = -1;
+            Node temp = head;
+            for (; temp != null; index++, temp = temp.next)
             {
-                if (value.Equals(item))
+                if (item.Equals(temp.item))
                 {
-                    index = c;
+                    foundIndex = index;
                 }
-                c++;
             }
-            return index;
+            return foundIndex;
         }
 
         public T[] ToArray()
