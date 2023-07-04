@@ -297,16 +297,16 @@ namespace ProjectWorlds.DataStructures.Trees
             }
         }
 
-        public OrderedList<TValue, TKey> RadialSearch(TKey[] center, TKey radius, int count)
+        public OrderedList<TKey, TValue> RadialSearch(TKey[] center, TKey radius, int count)
         {
-            OrderedList<Node, TKey> list = new OrderedList<Node, TKey>();
+            OrderedList<TKey, Node> list = new OrderedList<TKey, Node>();
             AddNearestNeighbors(root, center, HyperRect.Infinite(numDimensions, typeMath),
                 0, list, typeMath.Multiply(radius, radius), int.MaxValue);
 
-            OrderedList<TValue, TKey> res = new OrderedList<TValue, TKey>();
-            foreach (Pair<Node, TKey> pair in list)
+            OrderedList<TKey, TValue> res = new OrderedList<TKey, TValue>();
+            foreach (ComparablePair<TKey, Node> pair in list)
             {
-                res.AppendBack(pair.Key.value, pair.Value);
+                res.AppendBack(pair.key, pair.value.value);
             }
 
             return res;
@@ -316,7 +316,7 @@ namespace ProjectWorlds.DataStructures.Trees
             TKey[] point,
             HyperRect rect,
             int depth,
-            OrderedList<Node, TKey> nearest,
+            OrderedList<TKey, Node> nearest,
             TKey searchRadiusSquared,
             int maxSize
             )
@@ -363,7 +363,7 @@ namespace ProjectWorlds.DataStructures.Trees
             {
                 if (nearest.Count >= maxSize)
                 {
-                    if (typeMath.CompareTo(squareDist, nearest[0].Value) < 0)
+                    if (typeMath.CompareTo(squareDist, nearest[0].key) < 0)
                     {
                         AddNearestNeighbors(fartherNode,
                             point,
@@ -395,16 +395,16 @@ namespace ProjectWorlds.DataStructures.Trees
                 // just add to the list
                 if (nearest.Count < maxSize)
                 {
-                    nearest.AppendBack(node, squareDist);
+                    nearest.AppendBack(squareDist, node);
                 }
                 // If the list is larger, check if the new dist is less
                 // than the current max. Add if new dist is shorter
                 else
                 {
-                    if (typeMath.CompareTo(squareDist, nearest[0].Value) < 0)
+                    if (typeMath.CompareTo(squareDist, nearest[0].key) < 0)
                     {
                         nearest.RemoveAt(0);
-                        nearest.AppendFront(node, squareDist);
+                        nearest.AppendFront(squareDist, node);
                     }
                 }
             }
@@ -502,7 +502,7 @@ namespace ProjectWorlds.DataStructures.Trees
             }
         }
 
-        public OrderedList<TValue, TKey> GetNearestNeighbors(TKey[] point, int queryCount = int.MaxValue)
+        public OrderedList<TKey, TValue> GetNearestNeighbors(TKey[] point, int queryCount = int.MaxValue)
         {
             if (queryCount > count)
             {
@@ -513,14 +513,14 @@ namespace ProjectWorlds.DataStructures.Trees
                 return null;
             }
 
-            OrderedList<Node, TKey> list = new OrderedList<Node, TKey>();
+            OrderedList<TKey, Node> list = new OrderedList<TKey, Node>();
             AddNearestNeighbors(root, point, HyperRect.Infinite(numDimensions, typeMath), 0, list, typeMath.MaxValue(), queryCount);
 
 
-            OrderedList<TValue, TKey> result = new OrderedList<TValue, TKey>();
+            OrderedList<TKey, TValue> result = new OrderedList<TKey, TValue>();
             foreach (Pair<Node, TKey> pair in result)
             {
-                result.AppendBack(pair.Key.value, pair.Value);
+                result.AppendBack(pair.Value, pair.Key.value);
             }
             return result;
         }

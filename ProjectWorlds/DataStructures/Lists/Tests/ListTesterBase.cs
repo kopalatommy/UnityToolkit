@@ -1184,6 +1184,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             {
                 if (!list.Remove(5))
                 {
+                    UnityEngine.Debug.Log("RemoveTest2 failed @ 1: " + list);
                     return false;
                 }
             }
@@ -1192,6 +1193,7 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             {
                 if (list[i] != 1)
                 {
+                    UnityEngine.Debug.Log("RemoveTest2 failed @ 2: " + list + " - " + list[i] + " - " + i);
                     return false;
                 }
             }

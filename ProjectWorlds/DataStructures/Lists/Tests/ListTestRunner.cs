@@ -6,11 +6,13 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
 {
     public class ListTestRunner : MonoBehaviour
     {
-        ArrayListTester arrayListTester;
-        CircularListTester circularListTester;
-        DoubleLinkedListTester doubleLinkedListTester;
-        LinkedListTester linkedListTester;
-        SkipListTester skipListTester;
+        private ArrayListTester arrayListTester;
+        private CircularListTester circularListTester;
+        private DoubleLinkedListTester doubleLinkedListTester;
+        private LinkedListTester linkedListTester;
+        private SkipListTester skipListTester;
+        private OrderedListTester orderedListTester;
+
         private void Start()
         {
             /*arrayListTester = new ArrayListTester();
@@ -25,8 +27,11 @@ namespace ProjectWorlds.DataStructures.Lists.Tests
             linkedListTester = new LinkedListTester();
             linkedListTester.RunTests(false, 60000);*/
 
-            skipListTester = new SkipListTester();
-            skipListTester.RunTests(false, 60000);
+            /*skipListTester = new SkipListTester();
+            skipListTester.RunTests(false, 60000);*/
+
+            /*orderedListTester = new OrderedListTester();
+            orderedListTester.RunTests(false, 60000);*/
         }
     }
 }

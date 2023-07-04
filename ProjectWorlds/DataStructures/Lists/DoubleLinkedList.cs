@@ -247,7 +247,7 @@ namespace ProjectWorlds.DataStructures.Lists
         {
             DoubleLinkedList<T> toRet = new DoubleLinkedList<T>(self);
 
-            toRet.Add(other as IEnumerable<T>);
+            toRet.Add(other);
             return toRet;
         }
 
@@ -299,7 +299,7 @@ namespace ProjectWorlds.DataStructures.Lists
         /// <param name="index">Index to change</param>
         /// <param name="item">New item</param>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public void Set(int index, T item)
+        public virtual void Set(int index, T item)
         {
             if (index < 0 || index >= count)
             {
@@ -612,36 +612,51 @@ namespace ProjectWorlds.DataStructures.Lists
                 {
                     if (cur.item.Equals(item))
                     {
-                        if (cur.Prev != null)
+                        if (cur == head)
                         {
-                            cur.Prev.Next = cur.Next;
-                            if (cur.Prev.Next == null)
+                            if (count == 1)
                             {
-                                tail = cur;
-                            }
-
-                            // If the next node is null, then set head to the current node
-                            /*if (cur.Prev.Next != null)
-                            {
-                                cur.Prev.Next.Prev = cur.Prev;
+                                Clear();
+                                return true;
                             }
                             else
                             {
-                                tail = cur;
-                            }*/
+                                head = head.Next;
+                                head.Prev.Next = null;
+                                head.Prev = null;
+                                count--;
+                                return true;
+                            }
+                        }
+                        else if (cur == tail)
+                        {
+                            if (count == 1)
+                            {
+                                Clear();
+                                return true;
+                            }
+                            else
+                            {
+                                tail = tail.Prev;
+                                tail.Next.Prev = null;
+                                tail.Next = null;
+                                count--;
+                                return true;
+                            }
                         }
                         else
                         {
-                            head = cur.Next;
-                            if (head == null)
-                            {
-                                tail = null;
-                            }
+                            cur.Prev.Next = cur.Next;
+                            cur.Next.Prev = cur.Prev;
+                            cur.Next = cur.Prev = null;
+                            count--;
+                            return true;
                         }
-                        count--;
-                        return true;
                     }
-                    cur = cur.Next;
+                    else
+                    {
+                        cur = cur.Next;
+                    }
                 }
             }
             return false;
@@ -817,19 +832,15 @@ namespace ProjectWorlds.DataStructures.Lists
         public int LastIndexOf(T item)
         {
             Node cur = tail;
-            int ind = Count - 1;
-            while (cur != null)
+            for (int i = count - 1; i >= 0; i--)
             {
                 if (cur.item.Equals(item))
                 {
-                    return ind;
+                    return i;
                 }
-                else
-                {
-                    ind--;
-                    cur = cur.Prev;
-                }
+                cur = cur.Prev;
             }
+
             return -1;
         }
 

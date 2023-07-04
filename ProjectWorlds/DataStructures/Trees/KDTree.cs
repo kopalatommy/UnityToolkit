@@ -823,7 +823,7 @@ namespace ProjectWorlds.DataStructures.Trees
 
                             if (smallestIndices.Count >= k)
                             {
-                                BSSR = smallestIndices[smallestIndices.Count - k].Value;
+                                BSSR = smallestIndices[smallestIndices.Count - k].value;
                             }
                         }
                     }
@@ -832,11 +832,11 @@ namespace ProjectWorlds.DataStructures.Trees
 
             for (int i = smallestIndices.Count - k; i < smallestIndices.Count; i++)
             {
-                Pair<int, float> temp = smallestIndices[i];
-                resultIndices.Add(values[temp.Key]);
+                ComparablePair<int, float> temp = smallestIndices[i];
+                resultIndices.Add(values[temp.key]);
                 if (resultDistances != null)
                 {
-                    resultDistances.Add(temp.Value);
+                    resultDistances.Add(temp.value);
                 }
             }
         }
